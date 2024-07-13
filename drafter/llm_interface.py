@@ -98,6 +98,8 @@ def parse_action(line):
     for name, method in ACTIONS.items():
         if name in line:
             path = line.split(name)[-1].strip()
+            if '/' not in path:
+                path = os.path.join('.', path)
             return method, path
     return None, None
 

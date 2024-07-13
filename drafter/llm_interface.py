@@ -47,6 +47,9 @@ def get_iteration(command):
         command=command
     )
     system_prompt = prompts.SYSTEM
+
+    format_output("(*￣▽￣)b Sending request to OpenAI. This may take a while...", style=Style.BRIGHT, color=Fore.YELLOW)
+
     response = client.chat.completions.create(
         model=model,
         messages=[
@@ -62,28 +65,32 @@ PROPOSAL = '[PROPOSAL]'
 
 
 def format_output(message, style=Style.RESET_ALL, color=Fore.RESET):
-    print(f"{style}{color}{message}{Style.RESET_ALL}{Fore.RESET}")
+    print(f"{style}{color}⮞ {message}{Style.RESET_ALL}{Fore.RESET}")
 
 
 def write_file(path, content):
     ensure_dirs(path)
     with open(path, 'w') as f:
         f.write(content)
+    return len(content.split('\n'))
 
 
 def create_file(path, content):
-    format_output(f'Creating file: {path}', style=Style.BRIGHT, color=Fore.GREEN)
-    return write_file(path, content)
+    format_output(f'🛠️ Creating file: {path}', style=Style.BRIGHT, color=Fore.GREEN)
+    num_lines = write_file(path, content)
+    format_output(f'File {path} created with {num_lines} lines. 💾', style=Style.BRIGHT, color=Fore.GREEN)
 
 
 def edit_file(path, content):
-    format_output(f'Editing file: {path}', style=Style.BRIGHT, color=Fore.YELLOW)
-    return write_file(path, content)
+    format_output(f'🛠️ Editing file: {path}', style=Style.BRIGHT, color=Fore.YELLOW)
+    num_lines = write_file(path, content)
+    format_output(f'File {path} edited with {num_lines} lines. 📝', style=Style.BRIGHT, color=Fore.YELLOW)
 
 
 def delete_file(path, content=''):
-    format_output(f'Deleting file: {path}', style=Style.BRIGHT, color=Fore.RED)
+    format_output(f'🛠️ Deleting file: {path}', style=Style.BRIGHT, color=Fore.RED)
     os.remove(path)
+    format_output(f'File {path} deleted. 🗑️', style=Style.BRIGHT, color=Fore.RED)
 
 
 ACTIONS = {
@@ -129,4 +136,5 @@ def execute_response(response):
                 line = line.replace(CODEBLOCK, '')
             codeblock_lines.append(line)
     run_operation(method, path, codeblock_lines)
-    format_output("Operation completed successfully.", style=Style.BRIGHT, color=Fore.CYAN)
+    format_output("🎉 Operation completed successfully! 🎉", style=Style.BRIGHT, color=Fore.CYAN)
+

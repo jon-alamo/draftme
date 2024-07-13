@@ -1,9 +1,11 @@
+
 import setuptools
 
 install_requires = [
-    'openai'
+    'openai',
+    'python-dotenv',
+    'colorama'
 ]
-
 
 setuptools.setup(
     name='draft-pilot',
@@ -19,7 +21,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-     ],
+    ],
     install_requires=install_requires,
     entry_points={
         'console_scripts': [

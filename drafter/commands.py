@@ -1,6 +1,7 @@
+
 import argparse
 import drafter.llm_interface as interface
-
+from colorama import Fore, Style
 
 def iterate_draft():
     parser = argparse.ArgumentParser(
@@ -14,4 +15,5 @@ def iterate_draft():
     )
     args = parser.parse_args()
     response = interface.get_iteration(args.command)
+    interface.format_output('Processing your request...', style=Style.BRIGHT, color=Fore.BLUE)
     interface.execute_response(response)

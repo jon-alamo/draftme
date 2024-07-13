@@ -14,26 +14,27 @@ The functionality is encapsulated in a single command-line command `draftme`, wh
 1. Clone the repository or download the source code.
 2. Ensure you have Python installed.
 3. Install the necessary dependencies by running:
-    
-    
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 ## Usage
 
 After setting up, you can use the `draftme` command to request changes. Ensure your `.env` file in the root directory contains your OpenAI API key:
 
-
+bash
 
 
 Use the command as follows:
 
-
+bash
 
 
 ## Example
 
 Suppose you want to refactor a function in `example.py`. You would run:
 
-
+bash
 
 
 The system will then analyze your request and the current state of the project, and make the necessary changes iteratively.

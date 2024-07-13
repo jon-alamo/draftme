@@ -115,11 +115,11 @@ def execute_response(response):
             run_operation(method, path, codeblock_lines)
             codeblock_lines = []
             method, path = parse_action(line)
-        elif not is_codeblock and CODEBLOCK in line:
+        elif not is_codeblock and line.startswith(CODEBLOCK):
             is_codeblock = True
             codeblock_lines.append(line.replace(CODEBLOCK, ''))
         elif is_codeblock:
-            if CODEBLOCK in line:
+            if line.startswith(CODEBLOCK):
                 is_codeblock = False
                 line = line.replace(CODEBLOCK, '')
             codeblock_lines.append(line)

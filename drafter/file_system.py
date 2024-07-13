@@ -1,5 +1,8 @@
 import os
+import dotenv
 
+dotenv.load_dotenv('.env')
+exclude = os.getenv('EXCLUDE').split(',')
 
 EXCLUDE_DIR_STARTS = ['__', '.']
 EXCLUDE_FIL_STARTS = ['.']
@@ -9,6 +12,8 @@ def is_valid_dir(dirname):
     if dirname.endswith('/'):
         dirname = dirname[:-1]
     dirname = os.path.basename(dirname)
+    if dirname in exclude:
+        return False
     return not any(dirname.startswith(patt) for patt in EXCLUDE_DIR_STARTS)
 
 
@@ -16,6 +21,8 @@ def is_valid_file(file_name):
     if file_name.endswith('/'):
         file_name = file_name[:-1]
     file_name = os.path.basename(file_name)
+    if file_name in exclude:
+        return False
     return not any(file_name.startswith(patt) for patt in EXCLUDE_FIL_STARTS)
 
 

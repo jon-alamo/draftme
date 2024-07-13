@@ -111,7 +111,7 @@ def execute_response(response):
     is_codeblock = False
     codeblock_lines = []
     for line in response.split('\n'):
-        if PROPOSAL in line:
+        if line.startswith(PROPOSAL):
             run_operation(method, path, codeblock_lines)
             codeblock_lines = []
             method, path = parse_action(line)

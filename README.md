@@ -30,6 +30,13 @@ Use the command as follows:
 bash
 
 
+## Running Tests
+
+You can run the test suite to ensure the functionality of the tool:
+
+bash
+
+
 ## Example
 
 Suppose you want to refactor a function in `example.py`. You would run:
@@ -48,3 +55,4 @@ The system will then analyze your request and the current state of the project, 
 ## License
 
 This project is licensed under the MIT License.
+

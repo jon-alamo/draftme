@@ -98,7 +98,7 @@ ACTIONS = {
     '[EDIT]': edit_file,
     '[DELETE]': delete_file
 }
-CODEBLOCK = '```'
+CODEBLOCK = '{codeblock}'
 
 
 def parse_action(line):

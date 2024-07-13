@@ -1,0 +1,192 @@
+[PROPOSAL] [ADD] tests/test_llm_interface.py
+```
+import os
+import unittest
+from unittest.mock import patch, mock_open, MagicMock
+import drafter.llm_interface as llm_interface
+
+class TestLLMInterface(unittest.TestCase):
+
+    @patch.dict(os.environ, {"OPENAI_API_KEY": "testkey"})
+    @patch('drafter.llm_interface.openai.OpenAI')
+    def test_get_iteration(self, mock_openai):
+        mock_openai.return_value.chat.completions.create.return_value.choices = [
+            MagicMock(message=MagicMock(content="[PROPOSAL] [ADD] test.txt\n```Hello World!```"))
+        ]
+        command = "Add a test file"
+        response = llm_interface.get_iteration(command)
+        self.assertIn("[PROPOSAL] [ADD] test.txt", response)
+
+    @patch('builtins.open', new_callable=mock_open)
+    @patch('os.makedirs')
+    def test_write_file(self, mock_makedirs, mock_file):
+        llm_interface.write_file('test.txt', 'Hello World')
+        mock_file.assert_called_once_with('test.txt', 'w')
+        mock_file().write.assert_called_once_with('Hello World')
+        mock_makedirs.assert_called_once_with('', exist_ok=True)
+
+    @patch('os.remove')
+    def test_delete_file(self, mock_remove):
+        llm_interface.delete_file('test.txt')
+        mock_remove.assert_called_once_with('test.txt')
+
+    def test_parse_action(self):
+        method, path = llm_interface.parse_action('[PROPOSAL] [ADD] test.txt')
+        self.assertEqual(method, llm_interface.create_file)
+        self.assertEqual(path, 'test.txt')
+
+        method, path = llm_interface.parse_action('[PROPOSAL] [EDIT] test.txt')
+        self.assertEqual(method, llm_interface.edit_file)
+        self.assertEqual(path, 'test.txt')
+
+        method, path = llm_interface.parse_action('[PROPOSAL] [DELETE] test.txt')
+        self.assertEqual(method, llm_interface.delete_file)
+        self.assertEqual(path, 'test.txt')
+
+    @patch('drafter.llm_interface.create_file')
+    def test_run_operation_create(self, mock_create):
+        llm_interface.run_operation(llm_interface.create_file, 'test.txt', ['Hello', 'World'])
+        mock_create.assert_called_once_with('test.txt', 'Hello\nWorld')
+
+    @patch('drafter.llm_interface.edit_file')
+    def test_run_operation_edit(self, mock_edit):
+        llm_interface.run_operation(llm_interface.edit_file, 'test.txt', ['Hello', 'World'])
+        mock_edit.assert_called_once_with('test.txt', 'Hello\nWorld')
+
+    @patch('drafter.llm_interface.delete_file')
+    def test_run_operation_delete(self, mock_delete):
+        llm_interface.run_operation(llm_interface.delete_file, 'test.txt', None)
+        mock_delete.assert_called_once_with('test.txt', '')
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+[PROPOSAL] [ADD] tests/test_file_system.py
+```
+import os
+import unittest
+from unittest.mock import patch, mock_open
+import drafter.file_system as fs
+
+class TestFileSystem(unittest.TestCase):
+
+    @patch('os.path.isdir')
+    @patch('os.path.isfile')
+    def test_is_valid_item(self, mock_isfile, mock_isdir):
+        mock_isdir.return_value = True
+        self.assertTrue(fs.is_valid_item('test_dir'))
+
+        mock_isdir.return_value = False
+        mock_isfile.return_value = True
+        self.assertTrue(fs.is_valid_item('test_file.py'))
+
+        mock_isdir.return_value = False
+        mock_isfile.return_value = False
+        self.assertFalse(fs.is_valid_item('invalid_item'))
+
+    @patch('builtins.open', new_callable=mock_open, read_data="file content")
+    @patch('os.listdir')
+    @patch('os.path.isdir')
+    @patch('os.path.isfile')
+    @patch('drafter.file_system.is_valid_item')
+    def test_iterate_project_path(self, mock_valid, mock_isfile, mock_isdir, mock_listdir, mock_open):
+        mock_isdir.side_effect = lambda x: x.endswith('/')
+        mock_isfile.side_effect = lambda x: not x.endswith('/')
+        mock_listdir.return_value = ['dir/', 'file.py']
+        mock_valid.side_effect = lambda x: True
+
+        items = list(fs.iterate_project_path('test/'))
+        self.assertIn('test/dir/', items)
+        self.assertIn('test/file.py', items)
+
+    @patch('drafter.file_system.iterate_project_path')
+    def test_generate_file_structure(self, mock_iterate):
+        mock_iterate.return_value = ['test/dir/', 'test/file.py']
+        structure = fs.generate_file_structure('test')
+        self.assertIn('Project file structure:', structure)
+
+    @patch('drafter.file_system.iterate_project_path')
+    @patch('builtins.open', new_callable=mock_open, read_data="file content")
+    def test_generate_file_contents(self, mock_open, mock_iterate):
+        mock_iterate.return_value = ['test/dir/', 'test/file.py']
+        content = fs.generate_file_contents('test')
+        self.assertIn('file content', content)
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+[PROPOSAL] [EDIT] requirements.txt
+```
+openai
+python-dotenv
+colorama
+unittest
+```
+
+[PROPOSAL] [EDIT] README.md
+```
+# DraftMe
+
+DraftMe is a Python library designed to assist in creating awesome code projects iteratively, with human supervision at every iteration. 
+
+## Overview
+
+The project allows users to send the current project file structure as part of the user prompt along with the change request for each iteration. There's a limit to the maximum number of tokens accepted by the OpenAI models, which can be a constraint for large-scale projects.
+
+The functionality is encapsulated in a single command-line command `draftme`, which is followed by a string containing the change request. The root directory is the current working directory where a `.env` file must exist with a valid OpenAI API key named `OPENAI_API_KEY`.
+
+## Installation
+
+1. Clone the repository or download the source code.
+2. Ensure you have Python installed.
+3. Install the necessary dependencies by running:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Usage
+
+After setting up, you can use the `draftme` command to request changes. Ensure your `.env` file in the root directory contains your OpenAI API key:
+
+```bash
+export OPENAI_API_KEY="your-api-key"
+```
+
+Use the command as follows:
+
+```bash
+draftme "Add a new function to example.py"
+```
+
+## Running Tests
+
+You can run the test suite to ensure the functionality of the tool:
+
+```bash
+python -m unittest discover -s tests
+```
+
+## Example
+
+Suppose you want to refactor a function in `example.py`. You would run:
+
+```bash
+draftme "Refactor function my_function in example.py"
+```
+
+The system will then analyze your request and the current state of the project, and make the necessary changes iteratively.
+
+## Special Considerations
+
+- Ensure the `.env` file is in the root directory.
+- Remember the limitations regarding the number of tokens for the OpenAI model.
+- For large-scale projects, consider breaking down change requests into smaller, more manageable parts.
+
+## License
+
+This project is licensed under the MIT License.
+
+```
+

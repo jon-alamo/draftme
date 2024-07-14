@@ -26,7 +26,7 @@ class TestLLMInterface(unittest.TestCase):
     @patch('builtins.open', new_callable=mock_open)
     @patch('os.makedirs')
     def test_write_file(self, mock_makedirs, mock_file):
-        llm_interface.write_file('test.txt', 'Hello World')
+        llm_interface.write_file('test.txt', 'Hello World', '')
         mock_file.assert_called_once_with('test.txt', 'w')
         mock_file().write.assert_called_once_with('Hello World')
         mock_makedirs.assert_called_once_with('', exist_ok=True)
@@ -39,30 +39,30 @@ class TestLLMInterface(unittest.TestCase):
     def test_parse_action(self):
         method, path = llm_interface.parse_action('[PROPOSAL] [ADD] test.txt')
         self.assertEqual(method, llm_interface.create_file)
-        self.assertEqual(path, 'test.txt')
+        self.assertEqual(path, './test.txt')
 
         method, path = llm_interface.parse_action('[PROPOSAL] [EDIT] test.txt')
         self.assertEqual(method, llm_interface.edit_file)
-        self.assertEqual(path, 'test.txt')
+        self.assertEqual(path, './test.txt')
 
         method, path = llm_interface.parse_action('[PROPOSAL] [DELETE] test.txt')
         self.assertEqual(method, llm_interface.delete_file)
-        self.assertEqual(path, 'test.txt')
+        self.assertEqual(path, './test.txt')
 
     @patch('drafter.llm_interface.create_file')
     def test_run_operation_create(self, mock_create):
         llm_interface.run_operation(llm_interface.create_file, 'test.txt', ['Hello', 'World'])
-        mock_create.assert_called_once_with('test.txt', 'Hello\nWorld')
+        mock_create.assert_called_once_with('test.txt', 'Hello\nWorld', '')
 
     @patch('drafter.llm_interface.edit_file')
     def test_run_operation_edit(self, mock_edit):
         llm_interface.run_operation(llm_interface.edit_file, 'test.txt', ['Hello', 'World'])
-        mock_edit.assert_called_once_with('test.txt', 'Hello\nWorld')
+        mock_edit.assert_called_once_with('test.txt', 'Hello\nWorld', '')
 
     @patch('drafter.llm_interface.delete_file')
     def test_run_operation_delete(self, mock_delete):
         llm_interface.run_operation(llm_interface.delete_file, 'test.txt', None)
-        mock_delete.assert_called_once_with('test.txt', '')
+        mock_delete.assert_called_once_with('test.txt', '', '')
 
 
 if __name__ == '__main__':

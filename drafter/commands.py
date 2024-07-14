@@ -3,6 +3,7 @@ import argparse
 import drafter.llm_interface as interface
 from colorama import Fore, Style
 
+
 def iterate_draft():
     parser = argparse.ArgumentParser(
         description='Ask for current code project change.'

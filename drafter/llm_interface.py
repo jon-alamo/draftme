@@ -16,7 +16,7 @@ model = 'gpt-4o'
 
 logs_dir = 'logs'
 backup_dir = 'backups'
-iterations_dir = 'iterations'
+iterations_dir = '.history'
 redo_dir = 'redos'
 max_iterations = 10
 
@@ -103,7 +103,7 @@ def edit_file(path, content, iteration_dir):
     format_output(f'File {path} edited with {num_lines} lines. 📝', style=Style.BRIGHT, color=Fore.YELLOW)
 
 
-def delete_file(path, content, iteration_dir):
+def delete_file(path, content=None, iteration_dir=iterations_dir):
     if os.path.exists(path):
         with open(path, 'r') as f:
             original_content = f.read()

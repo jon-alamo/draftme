@@ -114,8 +114,21 @@ def delete_file(path, content=None, backup_base_dir=iterations_dir):
     format_output(f'File {path} deleted. 🗑️', style=Style.BRIGHT, color=Fore.RED)
 
 
+def backup_current_state():
+    date_string = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    backup_path = os.path.join(iterations_dir, f'{date_string}-current')
+    ensure_dirs(backup_path)
+
+    for path in fs.iterate_project_path('.'):
+        if os.path.isfile(path):
+            with open(path, 'r') as f:
+                content = f.read()
+            backup_file(path, content, backup_path)
+
+
 def undo_last_change():
-    iteration_folders = sorted([d for d in os.listdir(iterations_dir) if os.path.isdir(os.path.join(iterations_dir, d))], reverse=True)
+    backup_current_state()
+    iteration_folders = sorted([d for d in os.listdir(iterations_dir) if os.path.isdir(os.path.join(iterations_dir, d)) and not d.endswith('-current')], reverse=True)
     if not iteration_folders:
         format_output("No iterations found. Nothing to undo.", style=Style.BRIGHT, color=Fore.YELLOW)
         return
@@ -183,6 +196,7 @@ def cleanup_old_iterations():
 
 def execute_response(response):
     log_response(response)
+    backup_current_state()  # Backup current state before executing any response
     date_string = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     current_iteration_dir = os.path.join(iterations_dir, date_string)
 
@@ -206,4 +220,3 @@ def execute_response(response):
 
     cleanup_old_iterations()
     format_output("🎉 Operation completed successfully! 🎉", style=Style.BRIGHT, color=Fore.CYAN)
-

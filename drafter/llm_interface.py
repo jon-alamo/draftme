@@ -78,19 +78,19 @@ def write_file(path, content):
 def create_file(path, content):
     format_output(f'🛠️ Creating file: {path}', style=Style.BRIGHT, color=Fore.GREEN)
     num_lines = write_file(path, content)
-    format_output(f'File {path} created with {num_lines} lines. 💾', style=Style.BRIGHT, color=Fore.GREEN)
+    format_output(f'\t💾 File {path} created with {num_lines} lines.', style=Style.BRIGHT, color=Fore.GREEN)
 
 
 def edit_file(path, content):
     format_output(f'🛠️ Editing file: {path}', style=Style.BRIGHT, color=Fore.YELLOW)
     num_lines = write_file(path, content)
-    format_output(f'File {path} edited with {num_lines} lines. 📝', style=Style.BRIGHT, color=Fore.YELLOW)
+    format_output(f'\t📝 File {path} edited with {num_lines} lines.', style=Style.BRIGHT, color=Fore.YELLOW)
 
 
 def delete_file(path, content=''):
     format_output(f'🛠️ Deleting file: {path}', style=Style.BRIGHT, color=Fore.RED)
     os.remove(path)
-    format_output(f'File {path} deleted. 🗑️', style=Style.BRIGHT, color=Fore.RED)
+    format_output(f'\t🗑️ File {path} deleted.', style=Style.BRIGHT, color=Fore.RED)
 
 
 ACTIONS = {

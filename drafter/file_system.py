@@ -50,6 +50,13 @@ def generate_file_structure(path):
     return '\n'.join(structure)
 
 
+def get_file_content(f):
+    try:
+        return f.read()
+    except UnicodeDecodeError:
+        return '<encoded file>'
+
+
 def generate_file_contents(path):
     content = []
     for item in iterate_project_path(path):
@@ -57,9 +64,10 @@ def generate_file_contents(path):
             content.append(generate_file_contents(item))
         elif os.path.isfile(item):
             with open(item, 'r') as f:
+                file_content = get_file_content(f)
                 content.append((
                     f'File: {item}:\n'
-                    f'{{file_content}}\n{f.read()}\n{{file_content}}'
+                    f'{{file_content}}\n{file_content}\n{{file_content}}'
                     '\n'
                 ))
     return '\n'.join(content)

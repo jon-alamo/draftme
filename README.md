@@ -12,7 +12,7 @@ The functionality is encapsulated in a single command-line command `draftme`, wh
 ## Installation
 
 1. Ensure Python (and pip) is installed in your system.
-2. Install the tool with:
+2. From a terminal, install the tool with:
     ```bash
     pip install git+https://github.com/jon-alamo/draftme.git
     ```

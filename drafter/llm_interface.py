@@ -22,7 +22,8 @@ max_iterations = 10
 
 
 def ensure_dirs(path):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+    if path:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
 
 
 def log_file(content, key):
@@ -129,6 +130,7 @@ def undo_last_change():
         original_path = file_path.replace(iterations_dir + os.sep + latest_iteration + os.sep, "")
         if os.path.exists(original_path):
             shutil.copyfile(original_path, os.path.join(redo_backup_path, original_path))
+        ensure_dirs(original_path)
         shutil.copyfile(file_path, original_path)
     shutil.rmtree(os.path.join(iterations_dir, latest_iteration))
     format_output(f"Undo last change: restored files from iteration {latest_iteration}.", style=Style.BRIGHT, color=Fore.GREEN)
@@ -143,6 +145,7 @@ def redo_last_change():
     backed_up_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(os.path.join(redo_dir, most_recent_redo)) for f in filenames]
     for file_path in backed_up_files:
         restored_path = file_path.replace(redo_dir + os.sep + most_recent_redo + os.sep, "")
+        ensure_dirs(restored_path)
         shutil.copyfile(file_path, restored_path)
     format_output(f"Redo last change: files restored from iteration {most_recent_redo}.", style=Style.BRIGHT, color=Fore.GREEN)
 

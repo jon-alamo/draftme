@@ -21,7 +21,6 @@ class TestFileSystem(unittest.TestCase):
         mock_isfile.return_value = False
         self.assertFalse(fs.is_valid_item('invalid_item'))
 
-
     @patch('drafter.file_system.iterate_project_path')
     def test_generate_file_structure(self, mock_iterate):
         mock_iterate.return_value = ['test/dir/', 'test/file.py']

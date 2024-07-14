@@ -10,11 +10,20 @@ def iterate_draft():
     parser.add_argument(
         'command',
         type=str,
+        nargs='?',
         help='Command to perform the code iteration.',
         default='.'
     )
+    parser.add_argument(
+        '--undo',
+        action='store_true',
+        help='Undo the last change.'
+    )
     args = parser.parse_args()
-    response = interface.get_iteration(args.command)
-    interface.format_output('Processing your request with a pinch of magic... 🌟', style=Style.BRIGHT, color=Fore.BLUE)
-    interface.execute_response(response)
 
+    if args.undo:
+        interface.undo_last_change()
+    else:
+        response = interface.get_iteration(args.command)
+        interface.format_output('Processing your request with a pinch of magic... 🌟', style=Style.BRIGHT, color=Fore.BLUE)
+        interface.execute_response(response)

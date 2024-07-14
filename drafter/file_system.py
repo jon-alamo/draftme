@@ -1,8 +1,9 @@
+
 import os
 import dotenv
 
 dotenv.load_dotenv('.env')
-exclude = os.getenv('EXCLUDE').split(',')
+exclude = os.getenv('EXCLUDE', '').split(',')
 
 EXCLUDE_DIR_STARTS = ['__', '.']
 EXCLUDE_FIL_STARTS = ['.']

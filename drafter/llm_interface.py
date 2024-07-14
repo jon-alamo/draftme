@@ -122,16 +122,11 @@ def undo_last_change():
     latest_iteration = iteration_folders[0]
     backed_up_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(os.path.join(iterations_dir, latest_iteration)) for f in filenames]
 
-    ensure_dirs(redo_dir)
-    redo_backup_path = os.path.join(redo_dir, latest_iteration)
-    ensure_dirs(redo_backup_path)
-
     for file_path in backed_up_files:
         original_path = file_path.replace(iterations_dir + os.sep + latest_iteration + os.sep, "")
-        if os.path.exists(original_path):
-            shutil.copyfile(original_path, os.path.join(redo_backup_path, original_path))
         ensure_dirs(original_path)
         shutil.copyfile(file_path, original_path)
+        
     shutil.rmtree(os.path.join(iterations_dir, latest_iteration))
     format_output(f"Undo last change: restored files from iteration {latest_iteration}.", style=Style.BRIGHT, color=Fore.GREEN)
 
@@ -206,4 +201,3 @@ def execute_response(response):
 
     cleanup_old_iterations()
     format_output("🎉 Operation completed successfully! 🎉", style=Style.BRIGHT, color=Fore.CYAN)
-

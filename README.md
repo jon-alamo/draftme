@@ -1,7 +1,7 @@
 
 # DraftMe
 
-DraftMe is a Python library designed to assist in creating awesome code projects iteratively, with human supervision at every iteration. 
+DraftMe is a Python command tool designed to assist in starting awesome code projects iteratively, with human supervision at every iteration. 
 
 ## Overview
 
@@ -11,34 +11,26 @@ The functionality is encapsulated in a single command-line command `draftme`, wh
 
 ## Installation
 
-1. Clone the repository or download the source code.
-2. Ensure you have Python installed.
-3. Install the necessary dependencies by running:
+1. Ensure Python (and pip) is installed in your system.
+2. Install the tool with:
     ```bash
-    pip install -r requirements.txt
+    pip install git+https://github.com/jon-alamo/draftme.git
     ```
 
 ## Usage
 
-After setting up, you can use the `draftme` command to request changes. Ensure your `.env` file in the root directory contains your OpenAI API key:
+1. From the terminal, create a new directory where to start a new project or navigate to an existing one.
+2. Ensure a `.env` file exists in the root directory with your OpenAI API key:
+   ```bash
+   export OPENAI_API_KEY="your-api-key"
+   ```
+3. Use the command `draftme` followed by a string with requested changes to the project as follows:
+   ```bash
+   draftme "Add a new function to example.py"
+   ```
 
-```bash
-export OPENAI_API_KEY="your-api-key"
-```
-
-Use the command as follows:
-
-```bash
-draftme "Add a new function to example.py"
-```
-
-## Running Tests
-
-You can run the test suite to ensure the functionality of the tool:
-
-```bash
-python -m unittest discover -s tests
-```
+## Warning!!
+- Changes on you project files are done automatically and are permanent, so there's no way to recover files once those have been changed so consider using git for version control and track every change by commiting before running the draftme command. 
 
 ## Example
 
@@ -50,8 +42,8 @@ draftme "Refactor function my_function in example.py"
 
 The system will then analyze your request and the current state of the project, and make the necessary changes iteratively.
 
-## Special Considerations
 
+## Special Considerations
 - Ensure the `.env` file is in the root directory.
 - Remember the limitations regarding the number of tokens for the OpenAI model.
 - For large-scale projects, consider breaking down change requests into smaller, more manageable parts.

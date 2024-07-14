@@ -22,27 +22,31 @@ The functionality is encapsulated in a single command-line command `draftme`, wh
 
 After setting up, you can use the `draftme` command to request changes. Ensure your `.env` file in the root directory contains your OpenAI API key:
 
-bash
-
+```bash
+export OPENAI_API_KEY="your-api-key"
+```
 
 Use the command as follows:
 
-bash
-
+```bash
+draftme "Add a new function to example.py"
+```
 
 ## Running Tests
 
 You can run the test suite to ensure the functionality of the tool:
 
-bash
-
+```bash
+python -m unittest discover -s tests
+```
 
 ## Example
 
 Suppose you want to refactor a function in `example.py`. You would run:
 
-bash
-
+```bash
+draftme "Refactor function my_function in example.py"
+```
 
 The system will then analyze your request and the current state of the project, and make the necessary changes iteratively.
 

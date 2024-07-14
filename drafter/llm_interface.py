@@ -48,7 +48,7 @@ def get_iteration(command):
     )
     system_prompt = prompts.SYSTEM
 
-    format_output("(*￣▽￣)b Sending request to OpenAI. This may take a while...", style=Style.BRIGHT, color=Fore.YELLOW)
+    format_output("The LLM is now processing your prompt. This may take a while...", style=Style.BRIGHT, color=Fore.YELLOW)
 
     response = client.chat.completions.create(
         model=model,

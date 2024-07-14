@@ -22,7 +22,7 @@ max_iterations = 10
 
 
 def ensure_dirs(path):
-    if path:
+    if path and path != '':
         os.makedirs(os.path.dirname(path), exist_ok=True)
 
 

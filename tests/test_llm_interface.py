@@ -39,15 +39,15 @@ class TestLLMInterface(unittest.TestCase):
     def test_parse_action(self):
         method, path = llm_interface.parse_action('[PROPOSAL] [ADD] test.txt')
         self.assertEqual(method, llm_interface.create_file)
-        self.assertEqual(path, 'test.txt')
+        self.assertEqual(path, './test.txt')
 
         method, path = llm_interface.parse_action('[PROPOSAL] [EDIT] test.txt')
         self.assertEqual(method, llm_interface.edit_file)
-        self.assertEqual(path, 'test.txt')
+        self.assertEqual(path, './test.txt')
 
         method, path = llm_interface.parse_action('[PROPOSAL] [DELETE] test.txt')
         self.assertEqual(method, llm_interface.delete_file)
-        self.assertEqual(path, 'test.txt')
+        self.assertEqual(path, './test.txt')
 
     @patch('drafter.llm_interface.create_file')
     def test_run_operation_create(self, mock_create):

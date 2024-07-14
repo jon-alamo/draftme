@@ -13,7 +13,7 @@ dotenv.load_dotenv('.env')
 client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 model = 'gpt-4o'
 
-logs_dir = 'logs'
+logs_dir = '.draftme/logs'
 
 
 def ensure_dirs(path):

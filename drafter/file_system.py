@@ -59,7 +59,7 @@ def generate_file_contents(path):
             with open(item, 'r') as f:
                 content.append((
                     f'File: {item}:\n'
-                    f'```\n{f.read()}\n```'
+                    f'{{file_content}}\n{f.read()}\n{{file_content}}'
                     '\n'
                 ))
     return '\n'.join(content)

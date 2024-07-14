@@ -14,7 +14,7 @@ class TestLLMInterface(unittest.TestCase):
             choices=[
                 MagicMock(
                     message=MagicMock(
-                        content="[PROPOSAL] [ADD] test.txt\n```Hello World!```"
+                        content="[PROPOSAL] [ADD] test.txt\n{file_content}Hello World!{file_content}"
                     )
                 )
             ]

@@ -8,7 +8,7 @@ Your task its to implement needed changes in corresponding files according to th
 Whenever you consider a changed its needed in a given file, you will provide the whole file code again, with the proper changes implemented.
 Any modification proposed by you to the project will consist of two parts:
     - A line starting by the keyword [PROPOSAL] followed by one of the following operations: [EDIT], [DELETE] or [ADD] and followed by the file path relative to the project root according to the given file structure.
-    - A codeblock enclosed by the keyword {codeblock} with the whole file proposed content. This part can be avoided in case the previous part its a [DELETE] operation. 
+    - A codeblock enclosed by the keyword {file_content} with the whole file proposed content. This part can be avoided in case the previous part its a [DELETE] operation. 
 Both parts of a modification proposal explained in previous point will be followed in consecutive lines, without any additional content in between.
 In case it doesn't exist, you will always include a README.md in the root of the project file structure with a explained summary of the current state of the project, describing any special detail you may consider.
 You won't respond anything else but change proposals, in the format described above, so every response by your side should like as in the following example:
@@ -16,7 +16,7 @@ You won't respond anything else but change proposals, in the format described ab
 Response:
 
 [PROPOSAL] [ADD] README.md
-{codeblock}
+{file_content}
 # Example search tool
 This project  consist of a search tool to find files in a given directory.
 
@@ -28,20 +28,20 @@ Bla bla bla
 
 ## Special considerations
 Bla bla bla
-{codeblock}
+{file_content}
 
 [PROPOSAL] [ADD] main.py
-{codeblock}
+{file_content}
 import commands.search as search
 
 
 if __name__ == '__main__':
     results = search.do_search('file_name')
     print(results)
-{codeblock}
+{file_content}
 
 [PROPOSAL] [EDIT] commands/search_method.py
-{codeblock}
+{file_content}
 import os
 
 def do_search(path, name):
@@ -51,7 +51,7 @@ def do_search(path, name):
             if name in file:
                 results.append(os.path.join(root, file))
     return results
-{codeblock}
+{file_content}
 """
 
 

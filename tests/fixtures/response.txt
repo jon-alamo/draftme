@@ -1,5 +1,5 @@
 [PROPOSAL] [ADD] tests/test_llm_interface.py
-```
+{file_content}
 import os
 import unittest
 from unittest.mock import patch, mock_open, MagicMock
@@ -11,7 +11,7 @@ class TestLLMInterface(unittest.TestCase):
     @patch('drafter.llm_interface.openai.OpenAI')
     def test_get_iteration(self, mock_openai):
         mock_openai.return_value.chat.completions.create.return_value.choices = [
-            MagicMock(message=MagicMock(content="[PROPOSAL] [ADD] test.txt\n```Hello World!```"))
+            MagicMock(message=MagicMock(content="[PROPOSAL] [ADD] test.txt\n{file_content}Hello World!{file_content}"))
         ]
         command = "Add a test file"
         response = llm_interface.get_iteration(command)
@@ -60,10 +60,10 @@ class TestLLMInterface(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-```
+{file_content}
 
 [PROPOSAL] [ADD] tests/test_file_system.py
-```
+{file_content}
 import os
 import unittest
 from unittest.mock import patch, mock_open
@@ -115,18 +115,18 @@ class TestFileSystem(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-```
+{file_content}
 
 [PROPOSAL] [EDIT] requirements.txt
-```
+{file_content}
 openai
 python-dotenv
 colorama
 unittest
-```
+{file_content}
 
 [PROPOSAL] [EDIT] README.md
-```
+{file_content}
 # DraftMe
 
 DraftMe is a Python library designed to assist in creating awesome code projects iteratively, with human supervision at every iteration. 
@@ -188,5 +188,5 @@ The system will then analyze your request and the current state of the project, 
 
 This project is licensed under the MIT License.
 
-```
+{file_content}
 

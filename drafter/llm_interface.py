@@ -98,7 +98,7 @@ ACTIONS = {
     '[EDIT]': edit_file,
     '[DELETE]': delete_file
 }
-CODEBLOCK = '{codeblock}'
+CODEBLOCK = '{file_content}'
 
 
 def parse_action(line):
@@ -123,7 +123,7 @@ def execute_response(response):
     is_codeblock = False
     codeblock_lines = []
     for line in response.split('\n'):
-        if line.startswith(PROPOSAL):
+        if line.startswith(PROPOSAL) and not is_codeblock:
             run_operation(method, path, codeblock_lines)
             codeblock_lines = []
             method, path = parse_action(line)

@@ -17,6 +17,7 @@ model = 'gpt-4o'
 logs_dir = 'logs'
 backup_dir = 'backups'
 iterations_dir = 'iterations'
+redo_dir = 'redos'
 max_iterations = 10
 
 
@@ -119,24 +120,31 @@ def undo_last_change():
         return
     latest_iteration = iteration_folders[0]
     backed_up_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(os.path.join(iterations_dir, latest_iteration)) for f in filenames]
+    
+    ensure_dirs(redo_dir)
+    redo_backup_path = os.path.join(redo_dir, latest_iteration)
+    ensure_dirs(redo_backup_path)
+    
     for file_path in backed_up_files:
         original_path = file_path.replace(iterations_dir + os.sep + latest_iteration + os.sep, "")
+        if os.path.exists(original_path):
+            shutil.copyfile(original_path, os.path.join(redo_backup_path, original_path))
         shutil.copyfile(file_path, original_path)
     shutil.rmtree(os.path.join(iterations_dir, latest_iteration))
     format_output(f"Undo last change: restored files from iteration {latest_iteration}.", style=Style.BRIGHT, color=Fore.GREEN)
 
 
 def redo_last_change():
-    iteration_folders = sorted([d for d in os.listdir(iterations_dir) if os.path.isdir(os.path.join(iterations_dir, d))])
-    if not iteration_folders:
-        format_output("No iterations found. Nothing to redo.", style=Style.BRIGHT, color=Fore.YELLOW)
+    redo_folders = sorted([d for d in os.listdir(redo_dir) if os.path.isdir(os.path.join(redo_dir, d))])
+    if not redo_folders:
+        format_output("No redo operations found.", style=Style.BRIGHT, color=Fore.YELLOW)
         return
-    most_recent_iteration = iteration_folders[-1]
-    backed_up_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(os.path.join(iterations_dir, most_recent_iteration)) for f in filenames]
+    most_recent_redo = redo_folders[-1]
+    backed_up_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(os.path.join(redo_dir, most_recent_redo)) for f in filenames]
     for file_path in backed_up_files:
-        restored_path = file_path.replace(iterations_dir + os.sep + most_recent_iteration + os.sep, "")
+        restored_path = file_path.replace(redo_dir + os.sep + most_recent_redo + os.sep, "")
         shutil.copyfile(file_path, restored_path)
-    format_output(f"Redo last change: files restored from iteration {most_recent_iteration}.", style=Style.BRIGHT, color=Fore.GREEN)
+    format_output(f"Redo last change: files restored from iteration {most_recent_redo}.", style=Style.BRIGHT, color=Fore.GREEN)
 
 
 ACTIONS = {

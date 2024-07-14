@@ -126,6 +126,19 @@ def undo_last_change():
     format_output(f"Undo last change: restored files from iteration {latest_iteration}.", style=Style.BRIGHT, color=Fore.GREEN)
 
 
+def redo_last_change():
+    iteration_folders = sorted([d for d in os.listdir(iterations_dir) if os.path.isdir(os.path.join(iterations_dir, d))])
+    if not iteration_folders:
+        format_output("No iterations found. Nothing to redo.", style=Style.BRIGHT, color=Fore.YELLOW)
+        return
+    most_recent_iteration = iteration_folders[-1]
+    backed_up_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(os.path.join(iterations_dir, most_recent_iteration)) for f in filenames]
+    for file_path in backed_up_files:
+        restored_path = file_path.replace(iterations_dir + os.sep + most_recent_iteration + os.sep, "")
+        shutil.copyfile(file_path, restored_path)
+    format_output(f"Redo last change: files restored from iteration {most_recent_iteration}.", style=Style.BRIGHT, color=Fore.GREEN)
+
+
 ACTIONS = {
     '[ADD]': create_file,
     '[EDIT]': edit_file,
@@ -182,4 +195,4 @@ def execute_response(response):
     
     cleanup_old_iterations()
     format_output("🎉 Operation completed successfully! 🎉", style=Style.BRIGHT, color=Fore.CYAN)
-
+    

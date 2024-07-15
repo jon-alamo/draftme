@@ -14,6 +14,7 @@ client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 model = 'gpt-4o'
 
 logs_dir = '.draftme/logs'
+MAX_TRIES = 10
 
 
 def ensure_dirs(path):
@@ -50,26 +51,45 @@ def get_iteration(command):
 
     format_output("The LLM is now processing your prompt. This may take a while...", style=Style.BRIGHT, color=Fore.YELLOW)
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {'role': 'system', 'content': system_prompt},
-            {'role': 'user', 'content': user_prompt}
-        ]
-    )
+    messages = [
+        {'role': 'system', 'content': system_prompt},
+        {'role': 'user', 'content': user_prompt}
+    ]
+    prompt_tokens = 0
+    completion_tokens = 0
+    total_tokens = 0
+    str_response = ''
+    finish_reason = 'unknown'
+
+    for tries in range(MAX_TRIES):
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages
+        )
+        messages.append(
+            {'role': 'assistant', 'content': response.choices[0].message}
+        )
+        is_finished = response.choices[0].finish_reason == "stop"
+        prompt_tokens += response.usage.prompt_tokens
+        completion_tokens += response.usage.completion_tokens
+        total_tokens += response.usage.total_tokens
+        str_response += response.choices[0].message
+        finish_reason = response.choices[0].finish_reason
+
+        if is_finished:
+            break
+
     response_info = (
-        f"# Model: {response.model}\n"
-        f"# Choices: {len(response.choices)}\n"
-        f"# First stop reason {response.choices[0].finish_reason}\n"
+        f"# Model: {model}\n"
+        f"# Stop reason {finish_reason}\n"
         f"# Usage:\n"
-        f"#     - prompt_tokens={response.usage.prompt_tokens}\n"
-        f"#     - completion_tokens={response.usage.prompt_tokens}\n"
-        f"#     - total_tokens={response.usage.total_tokens}\n\n"
+        f"#     - prompt_tokens={prompt_tokens}\n"
+        f"#     - completion_tokens={completion_tokens}\n"
+        f"#     - total_tokens={total_tokens}\n\n"
     )
-    string_response = response.choices[0].message.content
     log_prompt(user_prompt)
-    log_response(response_info + string_response)
-    return string_response
+    log_response(response_info + str_response)
+    return str_response
 
 
 PROPOSAL = '[PROPOSAL]'

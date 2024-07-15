@@ -51,7 +51,7 @@ def get_iteration(command):
 
     format_output(
         "The LLM is now processing your prompt. This may take a while. Completing in: ",
-        style=Style.BRIGHT, color=Fore.YELLOW
+        style=Style.BRIGHT, color=Fore.CYAN
     )
 
     messages = [
@@ -83,17 +83,20 @@ def get_iteration(command):
             break
 
     response_info = (
-        f"# Model: {model}\n"
-        f"# Stop reason {finish_reason}\n"
-        f"# Tokens: {total_tokens}\n\n"
+        f"model: {model}, tokens: {total_tokens}, stop_reason: {finish_reason}"
     )
     format_output(
-        f'\tFull response completed in {tries} requests with: \n{response_info}',
+        f'\tFull response completed in {tries} requests with:',
         style=Style.BRIGHT,
-        color=Fore.YELLOW
+        color=Fore.CYAN
+    )
+    format_output(
+        '\t' + response_info,
+        style=Style.BRIGHT,
+        color=Fore.CYAN
     )
     log_prompt(user_prompt)
-    log_response(response_info + str_response)
+    log_response(response_info + '\n' + str_response)
     return str_response
 
 

@@ -57,8 +57,19 @@ def get_iteration(command):
             {'role': 'user', 'content': user_prompt}
         ]
     )
+    response_info = (
+        f"# Model: {response.model}"
+        f"# Choices: {len(response.choices)}"
+        f"# First stop reason {response.choices[0].finish_reason}"
+        f"# Usage:"
+        f"#     - prompt_tokens={response.usage.prompt_tokens}"
+        f"#     - completion_tokens={response.usage.prompt_tokens}"
+        f"#     - total_tokens={response.usage.total_tokens}\n\n"
+    )
+    string_response = response.choices[0].message.content
     log_prompt(user_prompt)
-    return response.choices[0].message.content
+    log_response(response_info + string_response)
+    return string_response
 
 
 PROPOSAL = '[PROPOSAL]'
@@ -118,7 +129,6 @@ def run_operation(method, path, codeblock_lines=None):
 
 
 def execute_response(response):
-    log_response(response)
     method = path = None
     is_codeblock = False
     codeblock_lines = []

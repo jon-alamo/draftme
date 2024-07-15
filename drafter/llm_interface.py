@@ -66,14 +66,12 @@ def get_iteration(command):
             model=model,
             messages=messages
         )
-        messages.append(
-            {'role': 'assistant', 'content': response.choices[0].message}
-        )
+        messages.append(response.choices[0].message)
         is_finished = response.choices[0].finish_reason == "stop"
         prompt_tokens += response.usage.prompt_tokens
         completion_tokens += response.usage.completion_tokens
         total_tokens += response.usage.total_tokens
-        str_response += response.choices[0].message
+        str_response += response.choices[0].message.content
         finish_reason = response.choices[0].finish_reason
 
         if is_finished:

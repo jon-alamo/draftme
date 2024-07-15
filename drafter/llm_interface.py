@@ -25,7 +25,7 @@ def log_file(content, key):
     file_name = f'{date_string}-{key}.txt'
     file_path = os.path.join(logs_dir, file_name)
     ensure_dirs(file_path)
-    with open(file_path, 'w') as f:
+    with open(file_path, 'w', encoding='utf-8') as f:
         f.write(content)
 
 
@@ -70,7 +70,7 @@ def format_output(message, style=Style.RESET_ALL, color=Fore.RESET):
 
 def write_file(path, content):
     ensure_dirs(path)
-    with open(path, 'w') as f:
+    with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
     return len(content.split('\n'))
 

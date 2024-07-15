@@ -9,6 +9,6 @@ class TestResponse(unittest.TestCase):
     @unittest.mock.patch('drafter.llm_interface.write_file')
     def test_response(self, write_file_mock):
         write_file_mock.return_value = None
-        with open('tests/fixtures/response.txt', 'r') as f:
+        with open('tests/fixtures/response.txt', 'r', encoding='utf-8') as f:
             response = f.read()
         llm_interface.execute_response(response)

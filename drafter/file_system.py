@@ -53,7 +53,7 @@ def generate_file_structure(path):
 def get_file_content(f):
     try:
         return f.read()
-    except UnicodeDecodeError:
+    except:
         return '<encoded file>'
 
 
@@ -63,7 +63,7 @@ def generate_file_contents(path):
         if os.path.isdir(item):
             content.append(generate_file_contents(item))
         elif os.path.isfile(item):
-            with open(item, 'r') as f:
+            with open(item, 'r', encoding='utf-8') as f:
                 file_content = get_file_content(f)
                 content.append((
                     f'File: {item}:\n'

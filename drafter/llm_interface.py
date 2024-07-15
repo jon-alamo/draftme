@@ -58,12 +58,12 @@ def get_iteration(command):
         ]
     )
     response_info = (
-        f"# Model: {response.model}"
-        f"# Choices: {len(response.choices)}"
-        f"# First stop reason {response.choices[0].finish_reason}"
-        f"# Usage:"
-        f"#     - prompt_tokens={response.usage.prompt_tokens}"
-        f"#     - completion_tokens={response.usage.prompt_tokens}"
+        f"# Model: {response.model}\n"
+        f"# Choices: {len(response.choices)}\n"
+        f"# First stop reason {response.choices[0].finish_reason}\n"
+        f"# Usage:\n"
+        f"#     - prompt_tokens={response.usage.prompt_tokens}\n"
+        f"#     - completion_tokens={response.usage.prompt_tokens}\n"
         f"#     - total_tokens={response.usage.total_tokens}\n\n"
     )
     string_response = response.choices[0].message.content

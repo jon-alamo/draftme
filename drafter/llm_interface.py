@@ -43,9 +43,10 @@ def log_response(response):
 
 
 def format_messages(messages):
-    return ''.join(
-        [f"[{message['role']}]:\n{message['content']}" for message in messages]
-    )
+    return ''.join([
+        f"\n[[{message['role'].upper()}]]\n{message['content']}"
+        for message in messages
+    ])
 
 
 def get_iteration(command):
@@ -111,8 +112,6 @@ def get_iteration(command):
         color=Fore.CYAN
     )
     log_messages('# ' + response_info + '\n' + format_messages(messages))
-    # log_prompt(user_prompt)
-    # log_response(response_info + '\n' + str_response)
     return str_response
 
 

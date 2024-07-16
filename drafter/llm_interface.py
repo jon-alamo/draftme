@@ -84,7 +84,7 @@ def get_iteration(command):
         )
         messages.append({
             'role': 'system',
-            'content': 'Continue the previous message from the assistant in the exact point it ended so the code its not broken.'
+            'content': 'Continue the previous message from the assistant in the exact point it ended so the code its not broken. For this time, don\'t use any keyword or mark of any type at the beggining, so when the response its concatenated to the previous assistant\'s answer the code works'
         })
         messages.append({
             'role': 'assistant',

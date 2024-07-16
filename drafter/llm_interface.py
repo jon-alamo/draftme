@@ -61,7 +61,7 @@ def get_iteration(command):
     system_prompt = prompts.SYSTEM
 
     format_output(
-        "The LLM is now processing your prompt. This may take a while. Completing in: ",
+        "The LLM is now processing your prompt. This may take a while.\nCompleting in:",
         style=Style.BRIGHT, color=Fore.CYAN
     )
 
@@ -77,7 +77,7 @@ def get_iteration(command):
     tries = 1
 
     for tries in range(MAX_TRIES):
-        format_output(f'\t{tries}...', style=Style.BRIGHT, color=Fore.YELLOW)
+        format_output(f'\trequest {tries} ...', style=Style.BRIGHT, color=Fore.YELLOW)
         response = client.chat.completions.create(
             model=model,
             messages=messages
@@ -102,16 +102,12 @@ def get_iteration(command):
         f"model: {model}, tokens: {total_tokens}, stop_reason: {finish_reason}"
     )
     format_output(
-        f'\tFull response completed in {tries} requests with:',
+        f'Full response completed in {tries} requests with:',
         style=Style.BRIGHT,
         color=Fore.CYAN
     )
-    format_output(
-        '\t' + response_info,
-        style=Style.BRIGHT,
-        color=Fore.CYAN
-    )
-    log_messages('# ' + response_info + '\n' + format_messages(messages))
+    format_output(response_info, style=Style.BRIGHT, color=Fore.CYAN)
+    log_messages('# ' + response_info + '\n\n' + format_messages(messages))
     return str_response
 
 

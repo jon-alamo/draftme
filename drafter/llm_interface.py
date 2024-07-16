@@ -30,12 +30,22 @@ def log_file(content, key):
         f.write(content)
 
 
+def log_messages(messages):
+    log_file(messages, 'messages')
+
+
 def log_prompt(prompt):
     log_file(prompt, 'prompt')
 
 
 def log_response(response):
     log_file(response, 'response')
+
+
+def format_messages(messages):
+    return ''.join(
+        [f"[{message['role']}]:\n{message['content']}" for message in messages]
+    )
 
 
 def get_iteration(command):
@@ -100,8 +110,9 @@ def get_iteration(command):
         style=Style.BRIGHT,
         color=Fore.CYAN
     )
-    log_prompt(user_prompt)
-    log_response(response_info + '\n' + str_response)
+    log_messages('# ' + response_info + '\n' + format_messages(messages))
+    # log_prompt(user_prompt)
+    # log_response(response_info + '\n' + str_response)
     return str_response
 
 

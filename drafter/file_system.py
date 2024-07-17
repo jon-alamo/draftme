@@ -12,7 +12,7 @@ def is_valid_dir(dirname):
     if dirname.endswith('/'):
         dirname = dirname[:-1]
     dirname = os.path.basename(dirname)
-    if dirname in exclude:
+    if any(excl in dirname for excl in exclude):
         return False
     return not any(dirname.startswith(patt) for patt in EXCLUDE_DIR_STARTS)
 

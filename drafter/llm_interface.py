@@ -11,7 +11,7 @@ import drafter.file_system as fs
 dotenv.load_dotenv('.env')
 
 client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-model = 'gpt-4o'
+model = os.getenv('OPENAI_MODEL', 'gpt-4o').lower()
 
 logs_dir = '.draftme/logs'
 MAX_TRIES = 10

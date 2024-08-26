@@ -2,11 +2,11 @@ import os
 import dotenv
 
 dotenv.load_dotenv('.env')
-DEFAULT_EXCLUDES = ['__*', '.*']
+DEFAULT_EXCLUDES = ['__*', '.*', 'build']
 DEFAULT_INCLUDES = ['__init__.py']
 
-exclude = os.getenv('EXCLUDE', 'build').split(',') + DEFAULT_EXCLUDES
-include = os.getenv('INCLUDE', '*').split(',') + DEFAULT_INCLUDES
+exclude = os.getenv('EXCLUDE', '').split(',') + DEFAULT_EXCLUDES
+include = os.getenv('INCLUDE', '').split(',') + DEFAULT_INCLUDES
 
 
 def match_string(string: str, pattern: str) -> bool:
